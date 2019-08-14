@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Learn ExtJs</title>
+    <script type="text/javascript" src="ext-3.3.0/adapter/ext/ext-base.js"></script>
+    <script type="text/javascript" src="ext-3.3.0/ext-all.js"></script>
+    <link rel="stylesheet" type="text/css" href="ext-3.3.0/resources/css/ext-all.css" />
+    <script type="text/javascript">
+        Ext.onReady(function () {
+            Ext.ns('com.bill');
+            com.bill.triggerField = Ext.extend(Ext.form.TriggerField, {
+                triggerClass: 'x-form-search-trigger',
+                cls: 'triggerFiel-class',
+                initComponent: function () {
+                    com.bill.triggerField.superclass.initComponent.call(this);
+                },
+            })
+            Ext.reg('com.bill.triggerField', com.bill.triggerField);
+            var container = new Ext.Container({
+                id: 'container',
+                renderTo: Ext.getBody(),
+                items: [
+                    {
+                        xtype: 'box',
+                        width: 150,
+                        heigt: 120,
+                        style: 'position:absolute;',
+                        pageX: 100,
+                        pageY: 200,
+                        autoEl: {
+                            tag: 'img',
+                            src: 'img/Bing_logo_.png'
+                        }
+                    },
+                    {
+                        xtype: 'tabpanel',
+                        width: 400,
+                        plain: true,
+                        border: false,
+                        activeTab: 'internal',
+                        style: 'position:absolute;',
+                        pageX: 280,
+                        pageY: 200,
+                        items: [
+                            {
+                                id: 'internal',
+                                title: '国内版',
+                                items: [{
+                                    xtype: 'com.bill.triggerField'
+                                }]
+                            },
+                            {
+                                id: 'international',
+                                title: '国际版',
+                                items: [{
+                                    xtype: 'com.bill.triggerField'
+                                }]
+                            },
+
+                        ],
+                    },
+                ]
+            })
+        });
+    </script>
+    <style>
+        .triggerFiel-class {
+            width: 374px;
+        }
+
+        .x-tab-panel-header-plain .x-tab-strip-spacer {
+            border: 0px;
+            height: 0px;
+        }
+        .ext-gen24{
+            height: 20px;
+            width: 30px;
+        }
+    </style>
+
+</head>
+
+<body style="background-image:url(img/backGround.jpg)">
+
+</body>
+
+</html>
