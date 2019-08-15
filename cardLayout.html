@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Learn Layout</title>
+    <script type="text/javascript" src="ext-3.3.0/adapter/ext/ext-base.js"></script>
+    <script type="text/javascript" src="ext-3.3.0/ext-all.js"></script>
+    <link rel="stylesheet" type="text/css" href="ext-3.3.0/resources/css/ext-all.css" />
+    <script type="text/javascript">
+        Ext.onReady(function () {
+            var navHandler = function (direction) {
+                var wizard = Ext.getCmp('wizard').layout;
+                var prev = Ext.getCmp('move-prev');
+                var next = Ext.getCmp('move-next');
+                var activeId = wizard.activeItem.id;
+ 
+                if (activeId == 'Q1') {
+                    if (direction == 1) {
+                        wizard.setActiveItem(1);
+                        prev.setDisabled(false);
+                    }
+                } else if (activeId == 'Q50') {
+                    if (direction == -1) {
+                        wizard.setActiveItem(0);
+                        prev.setDisabled(true);
+                    } else {
+                        var answer = '';
+                        answer += '<p>Q1：番茄酱属于以下哪种垃圾 (单选)</p>'
+                        radioBox_answer = Ext.getCmp('radiogroup').getValue().boxLabel
+                        answer += '<p>' + radioBox_answer + '</p>' + '<p>Q50：王大叔出门遛狗后，哪些是正确处理狗粑粑的方法 (多选)</p>'
+                        checkBox_answer = Ext.getCmp('checkboxgroup').getValue().map(item => item.boxLabel).join('<br>')
+                        answer += checkBox_answer
+                        Ext.getCmp('answer').setText(answer)
+                        wizard.setActiveItem(2);
+                        prev.setDisabled(false);
+                        next.setDisabled(true);
+                    }
+                } else if (activeId == 'end') {
+                    if (direction == -1) {
+                        wizard.setActiveItem(1);
+                        prev.setDisabled(false);
+                        next.setDisabled(false);
+                    }
+                }
+            };
+
+
+            var q1Items = [
+                { boxLabel: '湿垃圾', name: 'garbage', inputValue: '1' },
+                { boxLabel: '干垃圾', name: 'garbage', inputValue: '2' },
+                { boxLabel: '有害垃圾', name: 'garbage', inputValue: '3' },
+                { boxLabel: '可回收物', name: 'garbage', inputValue: '4' }
+            ];
+
+            var q50Items = [
+                { boxLabel: '把粑粑用废纸包好带回家冲掉', inputValue: '1' },
+                { boxLabel: '受污染的报纸按有害垃圾处理', inputValue: '2' },
+                { boxLabel: '没受污染的报纸按可回收垃圾处理', inputValue: '3' },
+                { boxLabel: '受污染的报纸浸水后当湿垃圾处理', inputValue: '4' }
+            ];
+            var Questionnaire = new Ext.Panel({
+                renderTo: 'card',
+                id: 'wizard',
+                title: '环保问卷',
+                layout: 'card',
+                cls: 'Questionnaire-card-layout',
+                activeItem: 0,
+                defaults: {
+                    border: false
+                },
+                bbar: [
+                    {
+                        id: 'move-prev',
+                        text: 'Back',
+                        handler: navHandler.createDelegate(this, [-1]),
+                        disabled: true
+                    },
+                    '->',
+                    {
+                        id: 'move-next',
+                        text: 'Next',
+                        handler: navHandler.createDelegate(this, [1])
+                    }
+                ],
+                items: [
+                    {
+                        id: 'Q1',
+                        xtype: 'form',
+                        items: [
+                            {
+                                width: 500,
+                                xtype: 'tbtext',
+                                html: '<p>Q1：番茄酱属于以下哪种垃圾 (单选)</p>'
+
+                            },
+                            {
+                                id: 'radiogroup',
+                                xtype: 'radiogroup',
+                                items: [q1Items]
+                            }
+                        ]
+                    },
+                    {
+                        id: 'Q50',
+                        xtype: 'form',
+                        items: [{
+                            width: 500,
+                            xtype: 'tbtext',
+                            html: '<p>Q50：王大叔出门遛狗后，哪些是正确处理狗粑粑的方法 (多选)</p>'
+                        },
+                        {
+                            id: 'checkboxgroup',
+                            xtype: 'checkboxgroup',
+                            items: [q50Items],
+                        }],
+                    },
+                    {
+                        id: 'end',
+                        xtype: 'form',
+                        style: 'height:200px;',
+                        items: [{
+                            id: 'answer',
+                            xtype: 'tbtext',
+                            width: 500,
+                        }],
+                        buttons: [{
+                            xtype: 'button',
+                            text: 'Submit',
+                            style: ' margin-left: auto;margin-right: auto;margin-bottom:10px',
+                            handler: function () {
+                                Ext.Msg.alert('message', '已提交!')
+                            }
+                        }]
+                    }]
+            });
+        })
+    </script>
+    <style>
+        .Questionnaire-card-layout {
+            width: 800px;
+            margin: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="card">
+
+    </div>
+</body>
+
+</html>
