@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Learn Layout</title>
+    <script type="text/javascript" src="ext-3.3.0/adapter/ext/ext-base.js"></script>
+    <script type="text/javascript" src="ext-3.3.0/ext-all.js"></script>
+    <link rel="stylesheet" type="text/css" href="ext-3.3.0/resources/css/ext-all.css" />
+    <script type="text/javascript">
+        let selectedNode = '';
+        Ext.onReady(function () {
+            var menuAddEvent = function () {
+                if (selectedNode.attributes.text === 'Ita') {
+                    treeNode = new Ext.tree.TreeNode({ text: "New Class", leaf: false, editable: true })
+                    selectedNode.appendChild(treeNode)
+                }
+                else {
+                    treeNode = new Ext.tree.TreeNode({ text: "New Student", leaf: true, editable: true })
+                    if (selectedNode.attributes.leaf) {
+                        selectedNode.parentNode.appendChild(treeNode)
+                    } else {
+                        selectedNode.appendChild(treeNode)
+                    }
+
+                }
+            }
+            var menuDeleteEvent = function () {
+
+            }
+            var menu = new Ext.menu.Menu({
+                id: 'menu',
+                items: [
+                    {
+                        id: 'add',
+                        text: 'add',
+                    },
+                    {
+                        id: 'delete',
+                        text: 'delete',
+                    }
+                ],
+                listeners: {
+                    itemclick: function (item) {
+                        var node = item.parentMenu.contextNode;
+                        switch (item.id) {
+                            case 'add':
+                                menuAddEvent()
+                                break;
+                            case 'delete':
+                                n.remove();
+                                break;
+                        }
+                    }
+                }
+            })
+            var root = new Ext.tree.AsyncTreeNode({ text: 'Ita' })
+            var tree = new Ext.tree.TreePanel({
+                el: 'tree',
+                loader: new Ext.tree.TreeLoader({ dataUrl: 'class-student-data.txt' }),
+                root: root,
+                contextMenu: menu,
+                enableDD: true,
+                containerScroll: true,
+                listeners: {
+                    contextmenu: function (node, e) {
+                        e.preventDefault();
+                        node.select();
+                        var contextMenu = node.getOwnerTree().contextMenu;
+                        contextMenu.contextNode = node;
+                        menu.showAt(e.getXY())
+                    },
+                    'click': function (node) {
+                        selectedNode = node
+                    }
+                }
+            });
+            var treeEditor = new Ext.tree.TreeEditor(tree, { allowBlank: false }, {
+                listeners: {
+                    complete: function (editor, currVal, origVal) {
+                        console.log('editor')
+                    },
+
+                }
+            })
+
+            tree.render();
+
+            var submitEvent = function () {
+                if (selectedNode !== '') {
+                    var name = Ext.getCmp('name').getValue()
+                    var treeNode = ''
+                    menuAddEvent()
+                    Ext.getCmp('name').setValue("")
+
+                }
+            }
+            var myBorderPanel = new Ext.Panel({
+                renderTo: document.body,
+                width: 700,
+                height: 500,
+                title: 'Student Management',
+                layout: 'border',
+                items: [{
+                    title: 'Student Tree',
+                    region: 'west',
+                    margins: '5 0 0 5',
+                    width: 200,
+                    collapsible: true,
+                    cmargins: '5 5 0 5',
+                    id: 'west-region-container',
+                    layout: 'fit',
+                    items: [tree]
+
+                }, {
+                    title: 'Action',
+                    region: 'center',
+                    xtype: 'form',
+                    margins: '5 5 0 0',
+                    items: [
+                        {
+                            id: 'name',
+                            xtype: 'field',
+                            fieldLabel: 'Name',
+                        },
+                        {
+                            id: 'submitButton',
+                            xtype: 'button',
+                            text: 'Submit',
+                            listeners: {
+                                'click': submitEvent
+                            }
+                        },]
+                }]
+            });
+
+
+
+
+        });
+    </script>
+    <style>
+        .Questionnaire-card-layout {
+            width: 800px;
+            margin: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="tree"></div>
+</body>
+
+</html>
