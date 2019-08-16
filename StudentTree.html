@@ -37,7 +37,7 @@
                                 menuAddEvent()
                                 break;
                             case 'delete':
-                                node.remove();
+                            node.remove();
                                 break;
                         }
                     }
@@ -67,7 +67,7 @@
             var treeEditor = new Ext.tree.TreeEditor(tree, { allowBlank: false }, {
                 listeners: {
                     complete: function (editor, currVal, origVal) {
-                        Ext.Msg.alert("Message","修改成功")
+                       Ext.Msg.alert("message","修改成功")
                     }
                 }
             })
