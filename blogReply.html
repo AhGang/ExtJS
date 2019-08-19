@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Blog</title>
+    <script type="text/javascript" src="ext-3.3.0/adapter/ext/ext-base.js"></script>
+    <script type="text/javascript" src="ext-3.3.0/ext-all.js"></script>
+    <link rel="stylesheet" type="text/css" href="ext-3.3.0/resources/css/ext-all.css" />
+    <script type="text/javascript">
+        Ext.onReady(function () {
+            var progressBar = new Ext.ProgressBar({
+                hidden: true
+            })
+            var checkReplyBtn = function () {
+                if (!Ext.isEmpty(Ext.getCmp("content").getValue())) {
+                    Ext.getCmp("replybtn").setDisabled(false)
+                } else {
+                    Ext.getCmp("replybtn").setDisabled(true)
+                }
+            }
+            var replyBtnEvent = function () {
+                progressBar.show()
+                progressBar.wait({
+                    interval: 100,
+                    duration: 3000,
+                    increment: 30,
+                    text: 'Replaying...',
+                });
+                var task = new Ext.util.DelayedTask(function () {
+                    progressBar.reset()
+                    progressBar.hide()
+                    Ext.Msg.alert("msg", "reply success")
+                })
+                task.delay(3000)
+            }
+            var menu = new Ext.menu.Menu({
+                items: [{
+                    text: 'Edit',
+                    menu: [{
+                        text: 'Reset',
+                        handler: function () {
+                            Ext.getCmp("replybtn").setDisabled(true)
+                            var tpl = new Ext.Template(['']);
+                            tpl.overwrite(Ext.get('content'), '')
+                        }
+                    }]
+                },
+                {
+                    text: 'Insert',
+                    menu: [{
+                        text: 'Greet',
+                        handler: function () {
+                            Ext.getCmp("replybtn").setDisabled(false)
+                            var data = { name: 'Bill', age: 18 };
+                            var tpl = new Ext.Template([
+                                'Hi,I am {name}, {age} years old',
+                            ]);
+                            tpl.append(Ext.get('content'), data)
+                        }
+                    }]
+                }]
+            })
+            var toolbar = new Ext.Toolbar({
+                items: [{
+                    text: 'Menu',
+                    menu: menu
+                }]
+            })
+            var win = new Ext.Window({
+                height: 500,
+                width: 500,
+                tbar: toolbar,
+                contextMenu: menu,
+                items: [
+                    {
+                        id: 'content',
+                        xtype: 'textarea',
+                        width: 490,
+                        enableKeyEvents: true,
+                        contextMenu: menu,
+                        listeners: {
+                            keyup: checkReplyBtn
+                        }
+                    },
+                    {
+                        id: 'replybtn',
+                        xtype: 'button',
+                        text: 'reply',
+                        disabled: true,
+                        handler: replyBtnEvent
+                    },
+                    progressBar
+                ],
+                listeners: {
+                    render: function (p) {
+                        p.getEl().on('contextmenu', function (e) {
+                            e.preventDefault();
+                            menu.showAt(e.getXY())
+                        })
+                    },
+                }
+            })
+            win.show()
+        });
+    </script>
+</head>
+
+<body>
+</body>
+
+</html>
