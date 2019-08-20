@@ -50,31 +50,31 @@
             }
             var upOption = function () {
                 if (selectRow > 0) {
-                    store.insert(selectRow - 1, store.getAt(selectRow));
                     store.remove(selectRow);
+                    store.insert(selectRow - 1, store.getAt(selectRow));
                     grid.getView().refresh();
                 } else {
-                    store.insert(store.getTotalCount(), store.getAt(selectRow));
+                    store.remove(selectRow);
+                    store.insert(grid.store.data.keys.length-1, store.getAt(selectRow));
                     store.remove(selectRow);
                     grid.getView().refresh();
                 }
             }
             var downOption = function () {
-                if (selectRow < store.getTotalCount()) {
-                    store.insert(selectRow + 1, store.getAt(selectRow));
+                if (selectRow < grid.store.data.keys.length-1) {
                     store.remove(selectRow);
+                    store.insert(selectRow + 1, store.getAt(selectRow));
                     grid.getView().refresh();
                 }
             }
             var firstOption = function () {
-                store.insert(0, store.getAt(selectRow));
                 store.remove(selectRow);
+                store.insert(0, store.getAt(selectRow));
                 grid.getView().refresh();
             }
             var lastOption = function () {
-
-                store.insert(store.getTotalCount()-1, store.getAt(selectRow));
                 store.remove(selectRow);
+                store.insert(grid.store.data.keys.length-1, store.getAt(selectRow));
                 grid.getView().refresh();
 
             }
